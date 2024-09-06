@@ -13,7 +13,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     // Replace with the actual ConfyUI API endpoint
     const url = "http://localhost:8188/prompt"; 
 
-    chrome.storage.sync.get(['clientId', 'workflow'], (items) => {
+    chrome.storage.local.get(['clientId', 'workflow'], (items) => {
       const clientId = items.clientId;
       const workflowData = items.workflow ? JSON.parse(items.workflow) : {};
 

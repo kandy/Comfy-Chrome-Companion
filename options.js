@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Load the saved options
-    chrome.storage.sync.get(['clientId', 'workflow'], (items) => {
+    chrome.storage.local.get(['clientId', 'workflow'], (items) => {
         document.getElementById('clientId').value = items.clientId || '';
         document.getElementById('workflow').value = items.workflow || '';
     });
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const clientId = document.getElementById('clientId').value;
         const workflow = document.getElementById('workflow').value;
 
-        chrome.storage.sync.set({ clientId, workflow }, () => {
+        chrome.storage.local.set({ clientId, workflow }, () => {
             alert('Configuration saved!');
         });
     });
