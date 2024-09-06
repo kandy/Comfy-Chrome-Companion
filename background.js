@@ -19,8 +19,9 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
       // Define the JSON payload for the ConfyUI API
       let workflow = workflowData;
-      //index = workflow.find((el) => el.type == "Load Image From Url (mtb)");
-      workflow["143"].inputs = {"url": imageUrl};
+      let index = Object.values(workflow).findIndex((el) => el.type == "Load Image From Url (mtb)");
+      let key = Object.keys(workflow)[index];
+      workflow[key].inputs = {url: imageUrl};
 
       fetch(url, {  
         method: 'POST',
