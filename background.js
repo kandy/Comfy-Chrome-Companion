@@ -13,32 +13,20 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     // Replace with the actual ConfyUI API endpoint
     const url = "http://localhost:8188/prompt"; 
 
-    // Define the JSON payload for the ConfyUI API
-    const workflowData = {
-      "workflow": {
-        "steps": [
-          {
-            "name": "uploadImage",
-            "type": "apiCall",
-            "endpoint": "https://confyui.com/api/upload",  // Example endpoint
-            "method": "POST",
-            "params": {
-              "url": imageUrl  // Pass the image URL as a parameter
-            }
-          }
-        ]
-      }
-    };
+    chrome.storage.sync.get(['clientId', 'workflow'], (items) => {
+      const clientId = items.clientId;
+      const workflowData = items.workflow ? JSON.parse(items.workflow) : {};
 
-    fetch(url, {  
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(workflowData)
-    })
-    .then(response => response.json())
-    .then(data => console.log('Success:', data))
-    .catch((error) => console.error('Error:', error));
-  }
+      fetch(url, {  
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(workflowData)
+      })
+      .then(response => response.json())
+      .then(data => console.log('Success:', data))
+      .catch((error) => console.error('Error:', error));
+    });
+  };
 });
