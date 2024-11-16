@@ -15,17 +15,18 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
     chrome.storage.local.get(['clientId', 'workflow'], (items) => {
       const clientId = items.clientId;
-      const workflowData = items.workflow ? JSON.parse(items.workflow) : {};
+ 
+      const workflowData = items.workflow ? JSON.parse(items.workflow.replace('"{{IMAGE}}"', JSON.stringify(imageUrl))) : {};
 
       // Define the JSON payload for the ConfyUI API
       let workflow = workflowData;
-      let index = Object.values(workflow).findIndex((el) => el.class_type == "Load Image From Url (mtb)");
-      if (index === -1) {
-        tab.alert("Cannot fine URL in workflow"); 
-        return;
-      }
-      let key = Object.keys(workflow)[index];
-      workflow[key].inputs = {url: imageUrl};
+      // let index = Object.values(workflow).findIndex((el) => el.class_type == "Load Image From Url (mtb)");
+      // if (index === -1) {
+      //   tab.alert("Cannot fine URL in workflow"); 
+      //   return;
+      // }
+      // let key = Object.keys(workflow)[index];
+      // workflow[key].inputs = {url: imageUrl};
       
       fetch(url, {  
         method: 'POST',
