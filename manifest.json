@@ -1,16 +1,25 @@
 {
   "manifest_version": 3,
-  "name": "Send Image To URL",
+  "name": "Comfy Chrome Companion",
+  "description": "Send an image from the context menu to your ConfyUI workflow endpoint.",
   "version": "1.0",
   "permissions": [
     "contextMenus",
-    "activeTab",
-    "storage",
-    "unlimitedStorage"
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "background.js"
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
   "options_page": "options.html",
   "icons": {
     "16": "icon16.png",
