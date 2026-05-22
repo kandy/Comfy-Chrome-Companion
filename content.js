@@ -1,34 +1,30 @@
-// Listen for clicks on images while Win (Meta) + Alt keys are pressed
+// Listen for clicks on images while  Alt keys are pressed
 document.addEventListener('click', (event) => {
   if (!event.altKey) return;
-
-  const target = event.target;
-  if (target.closest && !(el = target.closest('img'))) return;
+console.log(event);
+  let target = event.target;
+  if (!target.matches('img')) {
+    target = target.closest('img');
+    if (!target || !target.matches('img')) return;
+  }
 
   event.preventDefault();
   event.stopPropagation();
 
-  const imageUrl = el.src;
+  const imageUrl = target.src;
   if (!imageUrl) {
     console.warn('Image element has no src attribute');
     return;
   }
-  target.style.outline = '8px solid #0c0'; // Visual feedback for selection
+  
 
-  // Send message to background script to process the image
-  chrome.runtime.sendMessage(
-    {
-      type: 'processImage',
-      imageUrl: imageUrl
-    },
-    (response) => {
-      if (chrome.runtime.lastError) {
-        console.error('Error sending message:', chrome.runtime.lastError);
-      } else if (response?.success) {
-        console.log('Image sent to ComfyUI successfully');
-      } else if (response?.error) {
-        console.error('Error processing image:', response.error);
-      }
-    }
-  );
+  // Send message to background script to process the image (fire-and-forget)
+  chrome.runtime.sendMessage({
+    type: 'KAndy::processImage',
+    imageUrl: imageUrl
+  }).catch(() => {
+    // Silently handle if service worker is unavailable
+    target.style.outline = '8px solid #c00'; // Visual feedback for selection
+  });
+  target.style.outline = '8px solid #0c0'; // Visual feedback for selection
 }, true); // Use capture phase to ensure we catch the event

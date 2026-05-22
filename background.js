@@ -117,21 +117,14 @@ ensureContextMenu();
 
 // Listen for messages from content script (Alt+Double Click)
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'processImage') {
+  if (message.type === 'KAndy::processImage') {
     const imageUrl = message.imageUrl;
     if (!imageUrl) {
-      sendResponse({ error: 'No image URL provided' });
       return;
     }
 
     processImageForComfy(imageUrl)
-      .then(() => {
-        sendResponse({ success: true });
-      })
-      .catch((error) => {
-        sendResponse({ error: error.message });
-      });
-
+    
     return true; // Will respond asynchronously
   }
 });
